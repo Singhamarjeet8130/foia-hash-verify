@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1631"/>
+      <stop offset="1" stop-color="#0B132B"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#131c3a"/>
+      <stop offset="1" stop-color="#0f1730"/>
+    </linearGradient>
+    <linearGradient id="btn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+
+  <!-- backdrop -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <circle cx="120" cy="70" r="260" fill="#6366f1" opacity="0.10"/>
+  <circle cx="1180" cy="140" r="240" fill="#22d3ee" opacity="0.08"/>
+
+  <!-- ===== Left: brand / headline ===== -->
+  <g transform="translate(90,150)">
+    <rect x="0" y="0" width="330" height="34" rx="17" fill="#ffffff" opacity="0.05"/>
+    <rect x="0" y="0" width="330" height="34" rx="17" fill="none" stroke="#26325a"/>
+    <circle cx="22" cy="17" r="6" fill="#22d3ee"/>
+    <text x="40" y="22" fill="#9aa7cf" font-size="15" font-weight="600">Open source · Runs entirely offline</text>
+
+    <text x="0" y="110" fill="#e6ebff" font-size="54" font-weight="700">FOIA</text>
+    <text x="160" y="110" fill="#22d3ee" font-size="54" font-weight="700">Hash</text>
+    <text x="310" y="110" fill="#22d3ee" font-size="54" font-weight="700">Verify</text>
+
+    <text x="0" y="165" fill="#9aa7cf" font-size="21">Prove a declassified or FOIA document is</text>
+    <text x="0" y="196" fill="#9aa7cf" font-size="21">authentic and byte-for-byte unaltered using</text>
+    <text x="0" y="227" fill="#9aa7cf" font-size="21">its SHA-256 fingerprint.</text>
+
+    <!-- privacy chip -->
+    <g transform="translate(0,270)">
+      <path d="M2 8 l6 6 l12 -14" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="32" y="14" fill="#34d399" font-size="16" font-weight="700">100% local — your file is never uploaded</text>
+    </g>
+  </g>
+
+  <!-- ===== Right: the tool card ===== -->
+  <g transform="translate(690,110)">
+    <rect x="0" y="0" width="500" height="420" rx="20" fill="url(#panel)" stroke="#26325a"/>
+
+    <!-- label -->
+    <text x="28" y="46" fill="#9aa7cf" font-size="13" font-weight="700" letter-spacing="1">1 · FILE TO CHECK</text>
+    <!-- drop zone -->
+    <rect x="28" y="58" width="444" height="66" rx="12" fill="#ffffff" opacity="0.02"/>
+    <rect x="28" y="58" width="444" height="66" rx="12" fill="none" stroke="#26325a" stroke-dasharray="6 5"/>
+    <text x="250" y="92" fill="#e6ebff" font-size="16" font-weight="700" text-anchor="middle">JFK-Oswald-201-file.pdf</text>
+    <text x="250" y="112" fill="#9aa7cf" font-size="13" text-anchor="middle">3.42 MB · hashed locally</text>
+
+    <!-- computed hash -->
+    <text x="28" y="162" fill="#9aa7cf" font-size="13" font-weight="700" letter-spacing="1">COMPUTED SHA-256</text>
+    <rect x="28" y="172" width="444" height="46" rx="10" fill="#0f1730" stroke="#26325a"/>
+    <text x="44" y="200" fill="#e6ebff" font-size="14" font-family="monospace">a1c4f9e2b7d80463f5aa19c6e3820d7b4f6c1e9a…</text>
+
+    <!-- expected hash -->
+    <text x="28" y="252" fill="#9aa7cf" font-size="13" font-weight="700" letter-spacing="1">2 · EXPECTED (PUBLISHED) HASH</text>
+    <rect x="28" y="262" width="330" height="46" rx="10" fill="#0f1730" stroke="#26325a"/>
+    <text x="44" y="290" fill="#9aa7cf" font-size="14" font-family="monospace">a1c4f9e2b7d80463f5aa19c6e…</text>
+    <rect x="368" y="262" width="104" height="46" rx="10" fill="url(#btn)"/>
+    <text x="420" y="290" fill="#07101f" font-size="15" font-weight="700" text-anchor="middle">Compare</text>
+
+    <!-- verdict: MATCH -->
+    <rect x="28" y="330" width="444" height="66" rx="12" fill="#34d399" opacity="0.12"/>
+    <rect x="28" y="330" width="444" height="66" rx="12" fill="none" stroke="#34d399" opacity="0.5"/>
+    <g transform="translate(48,352)">
+      <path d="M12 2 l16 6 v10 c0 10 -8 16 -16 20 c-8 -4 -16 -10 -16 -20 v-10 z" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M5 13 l5 5 l10 -11" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="92" y="360" fill="#34d399" font-size="18" font-weight="700">Match — the file is authentic</text>
+    <text x="92" y="384" fill="#9aa7cf" font-size="13">Byte-for-byte identical to the published record.</text>
+  </g>
+
+  <!-- footer strip -->
+  <text x="90" y="600" fill="#5b6690" font-size="15">Single file · Zero dependencies · Web Crypto API · MIT licensed</text>
+  <text x="1190" y="600" fill="#5b6690" font-size="15" text-anchor="end">verifoia.org</text>
+</svg>

@@ -2,12 +2,14 @@
 
 **A free, open-source, offline tool to verify that a declassified or FOIA-released document is authentic and unaltered — using its SHA-256 fingerprint.**
 
+![FOIA Hash Verify — hash a document locally in your browser and confirm it matches the published SHA-256](assets/preview.png)
+
 Primary-source government records are copied, re-scanned, mislabeled, and occasionally
 altered as they spread across the web. This single-file tool lets anyone confirm that a
 downloaded PDF is **byte-for-byte identical** to a trusted, published copy — in about ten
 seconds, without trusting the host.
 
-👉 **[Try it live](https://verifoia.org/verify)** · 📖 **[Read the full guide](https://verifoia.org/how-to-verify-declassified-documents)**
+👉 **[Live demo](https://singhamarjeet8130.github.io/foia-hash-verify/)** · 🌐 **[Use it on VeriFOIA](https://verifoia.org/verify)** · 📖 **[Read the full guide](https://verifoia.org/how-to-verify-declassified-documents)**
 
 ---
 
