@@ -7,7 +7,7 @@ altered as they spread across the web. This single-file tool lets anyone confirm
 downloaded PDF is **byte-for-byte identical** to a trusted, published copy — in about ten
 seconds, without trusting the host.
 
-👉 **[Try it live](https://verifoia.com/verify)** · 📖 **[Read the full guide](https://verifoia.com/how-to-verify-declassified-documents)**
+👉 **[Try it live](https://verifoia.org/verify)** · 📖 **[Read the full guide](https://verifoia.org/how-to-verify-declassified-documents)**
 
 ---
 
@@ -36,7 +36,7 @@ the file was not altered in transit or re-hosting.
 
 ## Use it
 
-**Option A — online:** open [verifoia.com/verify](https://verifoia.com/verify).
+**Option A — online:** open [verifoia.org/verify](https://verifoia.org/verify).
 
 **Option B — fully offline:** download `index.html`, open it in any browser, done. Because all
 hashing happens locally, running it offline is the most trustworthy option — you can inspect
@@ -84,5 +84,5 @@ This tool is intentionally generic. Replace the two `verifoia.com` links in the 
 
 ---
 
-Built for the [VeriFOIA](https://verifoia.com/) archive — a cryptographically verified
+Built for the [VeriFOIA](https://verifoia.org/) archive — a cryptographically verified
 collection of declassified U.S. government documents, each sealed with a SHA-256 fingerprint.
