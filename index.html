@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOIA Hash Verify — Check a declassified document's SHA-256 in your browser</title>
+<meta name="description" content="A free, offline, open-source tool to verify that a declassified or FOIA document is authentic and unaltered using its SHA-256 fingerprint. Your file never leaves your device.">
+<style>
+  :root{
+    --bg:#0B132B; --panel:#131c3a; --panel2:#0f1730; --line:#26325a;
+    --text:#e6ebff; --muted:#9aa7cf; --cyan:#22d3ee; --electric:#6366f1;
+    --ok:#34d399; --bad:#f87171; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 600px at 15% -10%,rgba(99,102,241,.18),transparent),
+               radial-gradient(1000px 500px at 110% 20%,rgba(34,211,238,.12),transparent),
+               var(--bg);
+    color:var(--text);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6; min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+  header{margin-bottom:28px}
+  .badge{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);
+    background:rgba(255,255,255,.03);color:var(--muted);padding:5px 12px;border-radius:999px;
+    font-size:12px;font-weight:600}
+  h1{font-size:30px;line-height:1.2;margin:16px 0 8px;letter-spacing:-.02em}
+  h1 .accent{color:var(--cyan)}
+  .lead{color:var(--muted);font-size:16px;margin:0}
+  .panel{background:linear-gradient(180deg,var(--panel),var(--panel2));
+    border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:22px}
+  label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);font-weight:700;margin-bottom:8px}
+  .drop{border:2px dashed var(--line);border-radius:14px;padding:30px 20px;text-align:center;
+    color:var(--muted);cursor:pointer;transition:.15s;background:rgba(255,255,255,.02)}
+  .drop.hover{border-color:var(--cyan);background:rgba(34,211,238,.06);color:var(--text)}
+  .drop strong{color:var(--text)}
+  .drop small{display:block;margin-top:6px;font-size:12px}
+  input[type=file]{display:none}
+  input[type=text]{width:100%;background:var(--panel2);border:1px solid var(--line);
+    border-radius:12px;color:var(--text);padding:12px 14px;font-family:var(--mono);font-size:13px}
+  input[type=text]:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+  .row{margin-top:18px}
+  .result{font-family:var(--mono);font-size:13px;word-break:break-all;background:var(--panel2);
+    border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--muted);min-height:44px}
+  .result.filled{color:var(--text)}
+  .verdict{margin-top:18px;border-radius:14px;padding:16px 18px;font-weight:600;display:none;align-items:center;gap:12px}
+  .verdict.show{display:flex}
+  .verdict.match{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.4);color:var(--ok)}
+  .verdict.nomatch{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.4);color:var(--bad)}
+  .verdict .ico{font-size:22px}
+  .verdict small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(90deg,var(--electric),var(--cyan));
+    color:#07101f;font-weight:700;border:none;border-radius:12px;padding:10px 16px;cursor:pointer;font-size:14px}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .meta{color:var(--muted);font-size:13px;margin-top:10px}
+  .grid2{display:grid;gap:14px}
+  @media(min-width:560px){.grid2{grid-template-columns:1fr auto}}
+  .how{margin-top:34px}
+  .how h2{font-size:18px;margin:0 0 12px}
+  .how ol{color:var(--muted);padding-left:20px;margin:0}
+  .how li{margin:6px 0}
+  code{font-family:var(--mono);background:var(--panel2);border:1px solid var(--line);
+    padding:2px 6px;border-radius:6px;font-size:12px;color:var(--cyan)}
+  footer{margin-top:40px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:20px}
+  footer a{color:var(--cyan);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  .priv{display:inline-flex;gap:6px;align-items:center;color:var(--ok);font-size:12px;font-weight:600;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">🔐 Open source · Runs entirely offline</span>
+    <h1>FOIA <span class="accent">Hash Verify</span></h1>
+    <p class="lead">Confirm that a declassified or FOIA document is authentic and byte-for-byte
+      unaltered by checking its SHA-256 fingerprint. Your file is hashed locally in your browser —
+      it is never uploaded anywhere.</p>
+  </header>
+
+  <div class="panel">
+    <label for="file">1 · Choose the file to check</label>
+    <div class="drop" id="drop">
+      <strong>Drop a file here</strong> or click to browse
+      <small id="fileName">No file selected</small>
+    </div>
+    <input type="file" id="file">
+
+    <div class="row">
+      <label>Computed SHA-256</label>
+      <div class="result" id="computed">—</div>
+      <button class="btn ghost" id="copyBtn" style="margin-top:10px;display:none">Copy hash</button>
+    </div>
+
+    <div class="row">
+      <label for="expected">2 · Paste the published (expected) hash <span style="text-transform:none;font-weight:400">— optional</span></label>
+      <div class="grid2">
+        <input type="text" id="expected" placeholder="e3b0c44298fc1c14…  (64 hex characters)" autocomplete="off" spellcheck="false">
+        <button class="btn" id="checkBtn">Compare</button>
+      </div>
+    </div>
+
+    <div class="verdict" id="verdict"></div>
+
+    <div class="priv">✓ 100% local — no network request is ever made with your file.</div>
+  </div>
+
+  <div class="how panel">
+    <h2>Prefer the command line?</h2>
+    <p class="meta">Every operating system ships a SHA-256 hasher. Run one of these and compare the output:</p>
+    <ol>
+      <li>macOS / Linux: <code>shasum -a 256 document.pdf</code> or <code>sha256sum document.pdf</code></li>
+      <li>Windows: <code>certutil -hashfile document.pdf SHA256</code></li>
+    </ol>
+  </div>
+
+  <footer>
+    <p>A matching hash proves <strong>integrity</strong> (your copy is identical to the sealed copy),
+      not <strong>origin</strong>. Trace a document to its official government source to establish where it came from.</p>
+    <p>Built for and by the
+      <a href="https://verifoia.com/" rel="noopener">VeriFOIA</a> archive ·
+      <a href="https://verifoia.com/how-to-verify-declassified-documents" rel="noopener">Full verification guide</a> ·
+      MIT licensed. Replace the links with your own if you fork it.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var fileInput=document.getElementById('file');
+  var drop=document.getElementById('drop');
+  var fileName=document.getElementById('fileName');
+  var computed=document.getElementById('computed');
+  var expected=document.getElementById('expected');
+  var verdict=document.getElementById('verdict');
+  var checkBtn=document.getElementById('checkBtn');
+  var copyBtn=document.getElementById('copyBtn');
+  var lastHash='';
+
+  function toHex(buffer){
+    var v=new Uint8Array(buffer),s='';
+    for(var i=0;i<v.length;i++){s+=v[i].toString(16).padStart(2,'0');}
+    return s;
+  }
+
+  async function hashFile(file){
+    computed.textContent='Hashing… ';
+    computed.classList.remove('filled');
+    verdict.classList.remove('show');
+    try{
+      var buf=await file.arrayBuffer();
+      var digest=await crypto.subtle.digest('SHA-256',buf);
+      lastHash=toHex(digest);
+      computed.textContent=lastHash;
+      computed.classList.add('filled');
+      copyBtn.style.display='inline-flex';
+      if(expected.value.trim()) compare();
+    }catch(e){
+      computed.textContent='Could not read file: '+e.message;
+    }
+  }
+
+  function normalize(s){return (s||'').trim().toLowerCase().replace(/[^a-f0-9]/g,'');}
+
+  function compare(){
+    var exp=normalize(expected.value);
+    if(!lastHash){ flash('nomatch','Choose a file first','Pick the document you want to check above.'); return; }
+    if(exp.length!==64){ flash('nomatch','That is not a valid SHA-256 hash','A SHA-256 hash is exactly 64 hexadecimal characters.'); return; }
+    if(exp===lastHash){
+      flash('match','✅ Match — the file is authentic','Your copy is byte-for-byte identical to the published record.');
+    }else{
+      flash('nomatch','❌ No match — the files differ','Even one differing character means the files are not identical. Re-download from the original source and try again.');
+    }
+  }
+
+  function flash(kind,title,sub){
+    verdict.className='verdict show '+kind;
+    verdict.innerHTML='<span class="ico">'+(kind==='match'?'🛡️':'⚠️')+'</span><span>'+title+'<small>'+sub+'</small></span>';
+  }
+
+  fileInput.addEventListener('change',function(e){
+    var f=e.target.files[0]; if(!f) return;
+    fileName.textContent=f.name+' · '+(f.size/1024/1024).toFixed(2)+' MB';
+    hashFile(f);
+  });
+  drop.addEventListener('click',function(){fileInput.click();});
+  ['dragenter','dragover'].forEach(function(ev){
+    drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.add('hover');});
+  });
+  ['dragleave','drop'].forEach(function(ev){
+    drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.remove('hover');});
+  });
+  drop.addEventListener('drop',function(e){
+    var f=e.dataTransfer.files[0]; if(!f) return;
+    fileName.textContent=f.name+' · '+(f.size/1024/1024).toFixed(2)+' MB';
+    hashFile(f);
+  });
+  checkBtn.addEventListener('click',compare);
+  expected.addEventListener('keydown',function(e){if(e.key==='Enter')compare();});
+  copyBtn.addEventListener('click',function(){
+    navigator.clipboard.writeText(lastHash).then(function(){
+      copyBtn.textContent='Copied!';setTimeout(function(){copyBtn.textContent='Copy hash';},1500);
+    });
+  });
+
+  if(!window.crypto||!crypto.subtle){
+    computed.textContent='Your browser does not support the Web Crypto API. Use the command line instead (see below).';
+  }
+})();
+</script>
+</body>
+</html>
